@@ -89,7 +89,7 @@ via the BCRequest.CurDataItem property and BCRequest.NextItem subroutine.
 
 ### Sample code
 
-'''VBA
+```VBA
 ' Make the "Immediate" debugger window visible to view output
 Public Sub PrintProducts()
     Dim Request As BCRequest
@@ -116,6 +116,5 @@ Public Sub PrintProducts()
         Request.NextItem
         Count = Count + 1
     Wend
-    
 End Sub
-'''
+```
