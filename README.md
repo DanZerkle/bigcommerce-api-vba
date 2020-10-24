@@ -63,8 +63,6 @@ Add the JsonConverter module to the project.  To do this,
 Download the following files from this repository, and add them to your project as above:
 
 * BCFilter.cls
-* BCOrder.cls
-* BCOrderedProduct.cls
 * BCProduct.cls
 * BCRequest.cls
 
@@ -91,4 +89,33 @@ via the BCRequest.CurDataItem property and BCRequest.NextItem subroutine.
 
 ### Sample code
 
-(Pending)
+'''VBA
+' Make the "Immediate" debugger window visible to view output
+Public Sub PrintProducts()
+    Dim Request As BCRequest
+    Dim Filters As New Collection
+    Dim Filter As BCFilter
+    
+    ' Subsitute your own credentials and store hash
+    Const AccessToken = "abcdefghijklmnopqrstuvwxyz01234"
+    Const ClientId = "abcdefghijklmnopqrstuvwxyz01234"
+    Const StoreHash = "abcdefgh"
+
+    Set Filter = New BCFilter
+    Filter.Init "include_fields", BCF_EQ, "sku,id,product_id,is_visible,name"
+    Filters.Add Filter
+    
+    Set Request = New BCRequest
+    Request.Init ClientId:=ClientId, AccessToken:=AccessToken, StoreHash:=StoreHash
+    Request.GetCatalogProducts limit:=15, Filters:=Filters
+    
+    Dim Count As Long
+    Count = 0
+    While Not Request.CurDataItem Is Nothing And Count < 40
+        Debug.Print JsonConverter.ConvertToJson(JsonValue:=Request.CurDataItem, Whitespace:=2)
+        Request.NextItem
+        Count = Count + 1
+    Wend
+    
+End Sub
+'''
